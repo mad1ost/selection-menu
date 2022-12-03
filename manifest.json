@@ -1,7 +1,7 @@
 {
-	"manifest_version": 2,
+	"manifest_version": 3,
 	"name": "Selection Menu",
-	"version": "1.4.7",
+	"version": "2.0.0",
 	"description": "Pop-up menu after selection with copying and searching for selected text in Google (or other search engines)",
 	"icons": {
 		"32": "icons/icon-32.png",
@@ -9,7 +9,7 @@
 		"128": "icons/icon-128.png"
 	},
 	"background": {
-		"scripts": ["background.js"]
+		"service_worker": "background.js"
 	},
 	"content_scripts": [
 		{
@@ -27,7 +27,7 @@
 	],
 	"options_ui": {
 		"page": "options.html",
-		"chrome_style": true
+		"browser_style": true
 	},
 	"permissions": [
 		"storage",

@@ -168,10 +168,7 @@ chrome.storage.local.get({
 					selectionMenu.hidden = true;
 					break;
 				case copyButtonElement:
-					chrome.runtime.sendMessage({
-						action: 'copy',
-						selectedString: selectedString
-					});
+					navigator.clipboard.writeText(selectedString);
 					selectionMenu.hidden = true;
 					break;
 			}
