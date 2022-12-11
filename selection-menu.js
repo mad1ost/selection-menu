@@ -168,13 +168,17 @@ chrome.storage.local.get({
 					selectionMenu.hidden = true;
 					break;
 				case copyButtonElement:
-					const body = document.body;
-					const textarea = document.createElement('textarea');
-					textarea.textContent = selectedString;
-					body.appendChild(textarea);
-					textarea.select();
-					document.execCommand('copy');
-					body.removeChild(textarea);
+					if (navigator.clipboard) {
+						navigator.clipboard.writeText(selectedString);
+					} else {
+						const body = document.body;
+						const textarea = document.createElement('textarea');
+						textarea.textContent = selectedString;
+						body.appendChild(textarea);
+						textarea.select();
+						document.execCommand('copy');
+						body.removeChild(textarea);
+					}
 					selectionMenu.hidden = true;
 					break;
 			}
