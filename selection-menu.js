@@ -3,7 +3,8 @@
 chrome.storage.local.get({
 	styleFontFamily: 'sans-serif',
 	searchButtonText: 'Search in Google',
-	copyButtonText: 'Copy'
+	copyButtonText: 'Copy',
+	enableDarkTheme: false
 }, (options) => {
 	let selectedString = '';
 	const style = document.createElement('style');
@@ -77,10 +78,27 @@ chrome.storage.local.get({
 		#selection-menu span:hover {
 			background-color: #8bb8dc;
 		}
+		#selection-menu.dark-theme {
+			--arrow-down: #2e2f38 transparent transparent transparent;
+			--arrow-up: transparent transparent #2e2f38 transparent;
+		}
+		#selection-menu.dark-theme li {
+			border-right-color: #43444c;
+		}
+		#selection-menu.dark-theme ul {
+			background-color: #2e2f38;
+		}
+		#selection-menu.dark-theme span {
+			color: #fff;
+		}
+		#selection-menu.dark-theme span:hover {
+			background-color: #0078d6;
+		}
 	`;
 	const selectionMenu = document.createElement('div');
 	selectionMenu.id = 'selection-menu';
 	selectionMenu.hidden = true;
+	if (options.enableDarkTheme) selectionMenu.classList.add('dark-theme');
 	const menuElement = document.createElement('ul');
 	const searchButtonElement = addMenuItem(options.searchButtonText);
 	const copyButtonElement = addMenuItem(options.copyButtonText);
@@ -141,6 +159,11 @@ chrome.storage.local.get({
 		selectionMenu.style.setProperty('--selection-menu-font-family', options.styleFontFamily);
 		searchButtonElement.textContent = options.searchButtonText;
 		copyButtonElement.textContent = options.copyButtonText;
+		if (options.enableDarkTheme) {
+			selectionMenu.classList.add('dark-theme');
+		} else {
+			selectionMenu.classList.remove('dark-theme');
+		}
 	});
 
 	window.addEventListener('message', (event) => {
