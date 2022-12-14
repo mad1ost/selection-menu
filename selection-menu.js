@@ -6,9 +6,142 @@ chrome.storage.local.get({
 	copyButtonText: 'Copy'
 }, (options) => {
 	let selectedString = '';
-	const selectionMenu = createSelectionMenu(options);
+	const style = document.createElement('style');
+	style.textContent = `
+		#selection-menu {
+			--arrow-down: white transparent transparent transparent;
+			--arrow-up: transparent transparent white transparent;
+			--arrow: var(--arrow-down);
+			background: transparent none repeat scroll 0% 0%;
+			border-radius: 0;
+			border-style: none;
+			box-shadow: none;
+			filter: drop-shadow(0 2px 4px rgba(0,0,0,0.35));
+			font-family: sans-serif;
+			font-size: medium;
+			font-stretch: normal;
+			font-style: normal;
+			font-variant: normal;
+			font-weight: normal;
+			height: auto;
+			letter-spacing: normal;
+			line-height: normal;
+			margin: 0;
+			overflow: visible;
+			padding: 0;
+			position: fixed;
+			text-indent: 0;
+			text-transform: none;
+			width: auto;
+			word-spacing: normal;
+			z-index: 99999;
+		}
+		#selection-menu:after {
+			border-color: var(--arrow);
+			border-style: solid;
+			border-width: 8px;
+			content: "";
+			height: 0;
+			left: var(--arrow-left, 50%);
+			margin-left: -8px;
+			pointer-events: none;
+			position: absolute;
+			width: 0;
+			top: var(--arrow-top, 100%);
+		}
+		#selection-menu ul {
+			background-color: white;
+			display: inline-block;
+			list-style: none;
+			margin: 0;
+			padding: 3px 0;
+			white-space: nowrap;
+		}
+		#selection-menu li {
+			border-right: 1px solid #ddd;
+			display: inline-block;
+			padding: 0 3px;
+		}
+		#selection-menu li:last-child {
+			border-right: 0;
+		}
+		#selection-menu span {
+			color: #222;
+			cursor: default;
+			display: inline-block;
+			font-family: var(--selection-menu-font-family, ${options.styleFontFamily}), sans-serif;
+			font-size: 13px;
+			line-height: 18px;
+			padding: 3px 7px;
+		}
+		#selection-menu span:hover {
+			background-color: #8bb8dc;
+		}
+	`;
+	const selectionMenu = document.createElement('div');
+	selectionMenu.id = 'selection-menu';
 	selectionMenu.hidden = true;
-	document.body.appendChild(selectionMenu);
+	const menuElement = document.createElement('ul');
+	const searchButtonElement = addMenuItem(options.searchButtonText);
+	const copyButtonElement = addMenuItem(options.copyButtonText);
+
+	selectionMenu.append(menuElement);
+	document.body.append(style, selectionMenu);
+
+	function addMenuItem(text) {
+		const menuItemElement = document.createElement('li');
+		menuElement.append(menuItemElement);
+		const textElement = document.createElement('span');
+		textElement.textContent = text;
+		menuItemElement.append(textElement);
+		return textElement;
+	}
+
+	selectionMenu.addEventListener('mousedown', (event) => {
+		event.preventDefault();
+		event.stopPropagation();
+	});
+
+	selectionMenu.addEventListener('mouseup', (event) => {
+		switch (event.target) {
+			case searchButtonElement:
+				chrome.runtime.sendMessage({
+					action: 'search',
+					selectedString: selectedString
+				});
+				selectionMenu.hidden = true;
+				break;
+			case copyButtonElement:
+				if (navigator.clipboard) {
+					navigator.clipboard.writeText(selectedString);
+				} else {
+					const body = document.body;
+					const textarea = document.createElement('textarea');
+					textarea.textContent = selectedString;
+					body.append(textarea);
+					textarea.select();
+					document.execCommand('copy');
+					body.removeChild(textarea);
+				}
+				selectionMenu.hidden = true;
+				break;
+		}
+		event.stopPropagation();
+	});
+
+	selectionMenu.addEventListener('click', (event) => {
+		event.stopPropagation();
+	});
+
+	chrome.storage.onChanged.addListener((changes, area) => {
+		if (area !== 'local') return;
+		for (let key in changes) {
+			options[key] = changes[key].newValue;
+		}
+		selectionMenu.style.setProperty('--selection-menu-font-family', options.styleFontFamily);
+		searchButtonElement.textContent = options.searchButtonText;
+		copyButtonElement.textContent = options.copyButtonText;
+	});
 
 	window.addEventListener('message', (event) => {
 		if (event.source !== window.top) return;
@@ -68,139 +201,4 @@ chrome.storage.local.get({
 				break;
 		}
 	});
-	
-	function createSelectionMenu(options) {
-		const selectionMenu = document.createElement('div');
-		const shadowRoot = selectionMenu.attachShadow({
-			mode: 'closed'
-		});
-		const style = document.createElement('style');
-		style.textContent = `
-			:host {
-				--arrow-down: white transparent transparent transparent;
-				--arrow-up: transparent transparent white transparent;
-				--arrow: var(--arrow-down);
-				background: transparent none repeat scroll 0% 0% !important;
-				border-radius: 0 !important;
-				border-style: none !important;
-				box-shadow: none !important;
-				filter: drop-shadow(0 2px 4px rgba(0,0,0,0.35)) !important;
-				font-family: sans-serif !important;
-				font-size: medium !important;
-				font-stretch: normal !important;
-				font-style: normal !important;
-				font-variant: normal !important;
-				font-weight: normal !important;
-				height: auto !important;
-				letter-spacing: normal !important;
-				line-height: normal !important;
-				margin: 0 !important;
-				overflow: visible !important;
-				padding: 0 !important;
-				position: fixed !important;
-				text-indent: 0 !important;
-				text-transform: none !important;
-				width: auto !important;
-				word-spacing: normal !important;
-				z-index: 99999 !important;
-			}
-			:host:after {
-				border-color: var(--arrow) !important;
-				border-style: solid !important;
-				border-width: 8px !important;
-				content: "" !important;
-				height: 0 !important;
-				left: var(--arrow-left, 50%) !important;
-				margin-left: -8px !important;
-				pointer-events: none !important;
-				position: absolute !important;
-				width: 0 !important;
-				top: var(--arrow-top, 100%) !important;
-			}
-			ul {
-				background-color: white;
-				display: inline-block;
-				list-style: none;
-				margin: 0;
-				padding: 3px 0;
-				white-space: nowrap;
-			}
-			li {
-				border-right: 1px solid #ddd;
-				display: inline-block;
-				padding: 0 3px;
-			}
-			li:last-child {
-				border-right: 0;
-			}
-			span {
-				color: #222;
-				cursor: default;
-				display: inline-block;
-				font-family: var(--menu-font-family, sans-serif);
-				font-size: 13px;
-				line-height: 18px;
-				padding: 3px 7px;
-			}
-			span:hover {
-				background-color: #8bb8dc;
-			}`;
-		shadowRoot.appendChild(style);
-		selectionMenu.style.setProperty('--menu-font-family', options.styleFontFamily);
-		let menuElement;
-		const searchButtonElement = addMenuItem(options.searchButtonText);
-		const copyButtonElement = addMenuItem(options.copyButtonText);
-		
-		shadowRoot.appendChild(menuElement);
-		
-		shadowRoot.addEventListener('mousedown', (event) => {
-			event.preventDefault();
-			event.stopPropagation();
-		});
-		
-		shadowRoot.addEventListener('mouseup', (event) => {
-			switch (event.target) {
-				case searchButtonElement:
-					chrome.runtime.sendMessage({
-						action: 'search',
-						selectedString: selectedString
-					});
-					selectionMenu.hidden = true;
-					break;
-				case copyButtonElement:
-					if (navigator.clipboard) {
-						navigator.clipboard.writeText(selectedString);
-					} else {
-						const body = document.body;
-						const textarea = document.createElement('textarea');
-						textarea.textContent = selectedString;
-						body.appendChild(textarea);
-						textarea.select();
-						document.execCommand('copy');
-						body.removeChild(textarea);
-					}
-					selectionMenu.hidden = true;
-					break;
-			}
-			event.stopPropagation();
-		});
-		
-		shadowRoot.addEventListener('click', (event) => {
-			event.stopPropagation();
-		});
-		
-		function addMenuItem(text) {
-			if (!menuElement) {
-				menuElement = document.createElement('ul');
-			}
-			const menuItemElement = document.createElement('li');
-			menuElement.appendChild(menuItemElement);
-			const textElement = document.createElement('span');
-			textElement.textContent = text;
-			menuItemElement.appendChild(textElement);
-			return textElement;
-		}
-		
-		return selectionMenu;
-	}
 });

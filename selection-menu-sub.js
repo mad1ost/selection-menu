@@ -131,7 +131,7 @@ function showSelectionMenu(element) { // event.target
 			mirrorDiv.style.left = elementPosition.left + 'px';
 			mirrorDiv.style.top = elementPosition.top + 'px';
 			
-			document.body.appendChild(mirrorDiv);
+			document.body.append(mirrorDiv);
 			mirrorDiv.scrollLeft = element.scrollLeft;
 			mirrorDiv.scrollTop = element.scrollTop;
 			
@@ -213,7 +213,7 @@ function showSelectionMenu(element) { // event.target
 	function createMirrorDiv(element) {
 		const mirrorDiv = document.createElement('div');
 		const textNode = document.createTextNode(element.value);
-		mirrorDiv.appendChild(textNode);
+		mirrorDiv.append(textNode);
 		
 		const properties = [
 			'boxSizing',
