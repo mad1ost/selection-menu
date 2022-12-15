@@ -1,7 +1,7 @@
 {
 	"manifest_version": 2,
 	"name": "Selection Menu",
-	"version": "2.2.0",
+	"version": "2.2.1",
 	"description": "Pop-up menu after selection with copying and searching for selected text in Google (or other search engines)",
 	"icons": {
 		"32": "icons/icon-32.png",

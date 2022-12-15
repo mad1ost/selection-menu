@@ -10,14 +10,10 @@ chrome.storage.local.get({
 	const style = document.createElement('style');
 	style.textContent = `
 		#selection-menu {
-			--arrow-down: white transparent transparent transparent;
-			--arrow-up: transparent transparent white transparent;
-			--arrow: var(--arrow-down);
 			background: transparent none repeat scroll 0% 0%;
 			border-radius: 0;
 			border-style: none;
-			box-shadow: none;
-			filter: drop-shadow(0 2px 4px rgba(0,0,0,0.35));
+			box-shadow: 0 2px 8px rgba(0,0,0,0.35);
 			font-family: sans-serif;
 			font-size: medium;
 			font-stretch: normal;
@@ -37,18 +33,17 @@ chrome.storage.local.get({
 			word-spacing: normal;
 			z-index: 99999;
 		}
-		#selection-menu:after {
-			border-color: var(--arrow);
-			border-style: solid;
-			border-width: 8px;
+		#selection-menu:before {
+			background-color: white;
+			box-shadow: 0 2px 8px rgba(0,0,0,0.35);
 			content: "";
-			height: 0;
-			left: var(--arrow-left, 50%);
-			margin-left: -8px;
-			pointer-events: none;
+			height: 11px;
+			left: var(--arrow-left, 0);
 			position: absolute;
-			width: 0;
-			top: var(--arrow-top, 100%);
+			width: 11px;
+			top: var(--arrow-top, 0);
+			transform-origin: left top;
+			transform: rotate(45deg);
 		}
 		#selection-menu ul {
 			background-color: white;
@@ -56,6 +51,7 @@ chrome.storage.local.get({
 			list-style: none;
 			margin: 0;
 			padding: 3px 0;
+			position: relative;
 			white-space: nowrap;
 		}
 		#selection-menu li {
@@ -78,9 +74,8 @@ chrome.storage.local.get({
 		#selection-menu span:hover {
 			background-color: #8bb8dc;
 		}
-		#selection-menu.dark-theme {
-			--arrow-down: #2e2f38 transparent transparent transparent;
-			--arrow-up: transparent transparent #2e2f38 transparent;
+		#selection-menu.dark-theme:before {
+			background-color: #2e2f38;
 		}
 		#selection-menu.dark-theme li {
 			border-right-color: #43444c;
@@ -213,8 +208,7 @@ chrome.storage.local.get({
 					arrowLeft = menuWidth/2;
 				}
 				
-				selectionMenu.style.setProperty('--arrow', onTop ? 'var(--arrow-down)' : 'var(--arrow-up)');
-				selectionMenu.style.setProperty('--arrow-top', (onTop ? menuHeight : -arrowHeight*2) + 'px');
+				selectionMenu.style.setProperty('--arrow-top', (onTop ? (menuHeight - arrowHeight) : -arrowHeight) + 'px');
 				selectionMenu.style.setProperty('--arrow-left', arrowLeft + 'px');
 				
 				break;
