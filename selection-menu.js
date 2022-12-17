@@ -90,6 +90,7 @@ chrome.storage.local.get({
 			background-color: #0078d6;
 		}
 	`;
+	document.head.append(style);
 	const selectionMenu = document.createElement('div');
 	selectionMenu.id = 'selection-menu';
 	selectionMenu.hidden = true;
@@ -99,7 +100,7 @@ chrome.storage.local.get({
 	const copyButtonElement = addMenuItem(options.copyButtonText);
 
 	selectionMenu.append(menuElement);
-	document.body.append(style, selectionMenu);
+	document.body.append(selectionMenu);
 
 	function addMenuItem(text) {
 		const menuItemElement = document.createElement('li');
