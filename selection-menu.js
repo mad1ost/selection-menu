@@ -10,27 +10,16 @@ chrome.storage.local.get({
 	const style = document.createElement('style');
 	style.textContent = `
 		#selection-menu {
-			background: transparent none repeat scroll 0% 0%;
 			border-radius: 0;
 			border-style: none;
 			box-shadow: 0 2px 8px rgba(0,0,0,0.35);
-			font-family: sans-serif;
-			font-size: medium;
-			font-stretch: normal;
-			font-style: normal;
-			font-variant: normal;
-			font-weight: normal;
 			height: auto;
-			letter-spacing: normal;
 			line-height: normal;
 			margin: 0;
 			overflow: visible;
 			padding: 0;
 			position: fixed;
-			text-indent: 0;
-			text-transform: none;
 			width: auto;
-			word-spacing: normal;
 			z-index: 99999;
 		}
 		#selection-menu:before {
@@ -69,8 +58,16 @@ chrome.storage.local.get({
 			display: inline-block;
 			font-family: var(--selection-menu-font-family, ${options.styleFontFamily}), sans-serif;
 			font-size: 13px;
+			font-stretch: normal;
+			font-style: normal;
+			font-variant: normal;
+			font-weight: normal;
+			letter-spacing: normal;
 			line-height: 18px;
 			padding: 3px 7px;
+			text-indent: 0;
+			text-transform: none;
+			word-spacing: normal;
 		}
 		#selection-menu span:hover {
 			background-color: #8bb8dc;
