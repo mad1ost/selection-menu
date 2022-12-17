@@ -57,6 +57,7 @@ chrome.storage.local.get({
 		#selection-menu li {
 			border-right: 1px solid #ddd;
 			display: inline-block;
+			margin: 0;
 			padding: 0 3px;
 		}
 		#selection-menu li:last-child {
