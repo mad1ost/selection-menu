@@ -2,19 +2,13 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<style>
-			/* https://design.firefox.com/photon/visuals/color.html */
-			:root {
-				--red-60: #d70022;
-			}
-		</style>
+		<link rel="stylesheet" href="options.css">
 	</head>
 	<body>
 		<form>
-			<p>Use a predefined or custom search engine</p>
-			<div class="browser-style">
+			<div>
 				<label>Search in</label>
-				<select name="select-search-engine" class="browser-style">
+				<select name="select-search-engine">
 					<option value="google">Google</option>
 					<option value="bing">Bing</option>
 					<option value="yahoo">Yahoo!</option>
@@ -23,26 +17,26 @@
 					<option value="duckduckgo">DuckDuckGo</option>
 					<option value="custom">Custom</option>
 				</select>
-				<input type="text" id="search-engine-url" class="browser-style" placeholder="Search engine URL" required>
+				<input type="text" id="search-engine-url" placeholder="Search engine URL" required>
 			</div>
-			<div class="browser-style">
+			<div>
 				<label for="style-font-family">CSS font-family</label>
-				<input type="text" id="style-font-family" class="browser-style" placeholder="e.g. Arial, Helvetica">
+				<input type="text" id="style-font-family" placeholder="e.g. Arial, Helvetica">
 				<span>, sans-serif</span>
 			</div>
-			<div class="browser-style">
+			<div>
 				<label for="search-button-text">Search button text</label>
-				<input type="text" id="search-button-text" class="browser-style" required>
+				<input type="text" id="search-button-text" required>
 			</div>
-			<div class="browser-style">
+			<div>
 				<label for="copy-button-text">Copy button text</label>
-				<input type="text" id="copy-button-text" class="browser-style" required>
+				<input type="text" id="copy-button-text" required>
 			</div>
-			<div class="browser-style">
-				<input class="browser-style" type="checkbox" id="dark-theme">
+			<div>
+				<input type="checkbox" id="dark-theme">
 				<label for="dark-theme">Dark theme</label>
 			</div>
-			<button type="submit" class="browser-style">Save</button>
+			<button type="submit">Save</button>
 		</form>
 		<script src="options.js"></script>
 	</body>
