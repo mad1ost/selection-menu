@@ -60,6 +60,10 @@ chrome.storage.local.get({
 			margin: 0;
 			padding: 0 3px;
 		}
+		#selection-menu li:after,
+		#selection-menu li:before {
+			content: normal;
+                }
 		#selection-menu li:last-child {
 			border-right: 0;
 		}
