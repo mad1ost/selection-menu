@@ -1,8 +1,9 @@
 {
 	"manifest_version": 3,
 	"name": "Selection Menu",
-	"version": "3.0.0",
+	"version": "3.0.1",
 	"description": "Pop-up menu after selection with copying and searching for selected text in Google (or other search engines)",
+	"homepage_url": "https://github.com/mad1ost/selection-menu",
 	"icons": {
 		"32": "icons/icon-32.png",
 		"64": "icons/icon-64.png",
