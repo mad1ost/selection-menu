@@ -12,7 +12,8 @@ function saveOptions(event) {
 		styleFontFamily:  form['style-font-family'].value,
 		searchButtonText: form['search-button-text'].value,
 		copyButtonText:   form['copy-button-text'].value,
-		enableDarkTheme:  form['dark-theme'].checked
+		enableDarkTheme:  form['dark-theme'].checked,
+		copyWhenSearch:   form['copy-when-search'].checked
 	});
 	event.preventDefault();
 }
@@ -24,7 +25,8 @@ function restoreOptions() {
 		styleFontFamily:  '',
 		searchButtonText: 'Search in Google',
 		copyButtonText:   'Copy',
-		enableDarkTheme:  false
+		enableDarkTheme:  false,
+		copyWhenSearch:   false
 	}, (options) => {
 		form['select-search-engine'].value = options.searchEngineName;
 		if (options.searchEngineName !== 'custom') {
@@ -35,6 +37,7 @@ function restoreOptions() {
 		form['search-button-text'].value = options.searchButtonText;
 		form['copy-button-text'].value   = options.copyButtonText;
 		form['dark-theme'].checked       = options.enableDarkTheme;
+		form['copy-when-search'].checked = options.copyWhenSearch;
 	});
 }
 

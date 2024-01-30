@@ -4,7 +4,8 @@ chrome.storage.local.get({
 	styleFontFamily: 'sans-serif',
 	searchButtonText: 'Search in Google',
 	copyButtonText: 'Copy',
-	enableDarkTheme: false
+	enableDarkTheme: false,
+	copyWhenSearch:  false
 }, (options) => {
 	let selectedString = '';
 	const style = document.createElement('style');
@@ -116,6 +117,20 @@ chrome.storage.local.get({
 		return textElement;
 	}
 
+	function copyToClipboard() {
+		if (navigator.clipboard) {
+			navigator.clipboard.writeText(selectedString);
+		} else {
+			const body = document.body;
+			const textarea = document.createElement('textarea');
+			textarea.textContent = selectedString;
+			body.append(textarea);
+			textarea.select();
+			document.execCommand('copy');
+			body.removeChild(textarea);
+		}
+	}
+
 	selectionMenu.addEventListener('mousedown', (event) => {
 		event.preventDefault();
 		event.stopPropagation();
@@ -124,6 +139,9 @@ chrome.storage.local.get({
 	selectionMenu.addEventListener('mouseup', (event) => {
 		switch (event.target) {
 			case searchButtonElement:
+				if (options.copyWhenSearch) {
+					copyToClipboard();
+				}
 				chrome.runtime.sendMessage({
 					action: 'search',
 					selectedString: selectedString
@@ -131,17 +149,7 @@ chrome.storage.local.get({
 				selectionMenu.hidden = true;
 				break;
 			case copyButtonElement:
-				if (navigator.clipboard) {
-					navigator.clipboard.writeText(selectedString);
-				} else {
-					const body = document.body;
-					const textarea = document.createElement('textarea');
-					textarea.textContent = selectedString;
-					body.append(textarea);
-					textarea.select();
-					document.execCommand('copy');
-					body.removeChild(textarea);
-				}
+				copyToClipboard();
 				selectionMenu.hidden = true;
 				break;
 		}
